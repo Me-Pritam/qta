@@ -40,82 +40,81 @@ public class SendingMessagetoStudents {
                     .click();
 
             driver.findElement(By.xpath("//input[@name='username']"))
-                    .sendKeys("pritam.pramanick@qspiders.in");
+                    .sendKeys("Bongarala.b@qspiders.in");
 
             driver.findElement(By.xpath("//input[@name='password']"))
-                    .sendKeys("K)P4d^j8");
+                    .sendKeys("1yb?Z-D3'1");
 
             driver.findElement(By.xpath("//button[text()='Login']"))
                     .click();
 
-            for (Object[] row : allData)
-            {
+            for (Object[] row : allData) {
                 String date = row[0].toString();
 
-                String batchCode = row[1].toString();
+                if (row[1].toString().equals("null")) {
+                    continue;
+                } else {
+                    String batchCode = row[1].toString();
 
-                String subject = row[2].toString();
+                    String subject = row[2].toString();
 
-                String roomNo = row[3].toString();
+                    String trainerName = row[3].toString();
 
-                String time = row[4].toString();
+                    String roomNo = row[4].toString();
 
-
-
-          WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
-
-          wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='search']")))
-                  .sendKeys(batchCode);
+                    String time = row[5].toString();
 
 
+                    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
 
-          WebElement qtalkBatchCode = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='_user_container__1yvFq']/descendant::h1")));
-
-          if (qtalkBatchCode.isDisplayed())
-          {
-             wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//div[@class='_user_container__1yvFq']/descendant::a"))))
-                      .click();
-
-             if (wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='_chat_Head__v-gCN']/child::button"))).isDisplayed())
-             {
-               wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='_chat_Head__v-gCN']/child::button")))
-                       .click();
-
-             }
-
-              if (driver.findElement(By.xpath("//p[text()='This is BroadCast Chat']")).isDisplayed())
-              {
-                  Actions action = new Actions(driver);
-
-                  action.click(driver.findElement(By.xpath("//input[@placeholder='write something...']")))
-                          .sendKeys(wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//input[@placeholder='write something...']")))),
-                                  "New Batch of "+subject+" is going to start on "+date+" Room number -> "+time)
-                          .perform();
+                    wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='search']")))
+                            .sendKeys(batchCode);
 
 
+                    WebElement qtalkBatchCode = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='_user_container__1yvFq']/descendant::h1")));
+
+                    if (qtalkBatchCode.isDisplayed())
+                    {
+                        wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//div[@class='_user_container__1yvFq']/descendant::a"))))
+                                .click();
+
+                        if (wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='_chat_Head__v-gCN']/child::button"))).isDisplayed()) {
+                            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='_chat_Head__v-gCN']/child::button")))
+                                    .click();
+
+                        }
+
+                        if (driver.findElement(By.xpath("//p[text()='This is BroadCast Chat']")).isDisplayed()) {
+                            Actions action = new Actions(driver);
+
+                            action.click(driver.findElement(By.xpath("//input[@placeholder='write something...']")))
+                                    .sendKeys(wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//input[@placeholder='write something...']")))),
+                                            "Hi! Please note that on " + date + ", your " + subject + " class will be held in Room " + roomNo + " at " + time + ".")
+//                                            "Hi this is an Automated message for Batch Updates/ Requirements/ Placement Reports/ Mock Updates/ Emergency Updates. From tomorrow onwards everyday you will be getting Updates. Stay Tuned...")
+                                    .perform();
+
+                            System.out.println(date+" "+time+" "+subject+" "+roomNo);
 
 
-                  action.pause(Duration.ofSeconds(2))
-                          .sendKeys(Keys.ENTER)
-                          .perform();
+                            action.pause(Duration.ofSeconds(2))
+                                    .sendKeys(Keys.ENTER)
+                                    .perform();
 
-                  Thread.sleep(1000);
-
-                  driver.navigate().back();
-
-//             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Batch List']")))
-//                     .click();
-              }
+                            Thread.sleep(1000);
 
 
+                            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Batch List']")))
+                                    .click();
 
-          }
-          else {
-              System.out.println(batchCode+" problem happened");
-          }
-
-
-
+                            Thread.sleep(1000);
+                            driver.navigate().refresh();
+                        }
+                    } else {
+                        //System.out.println(batchCode + " problem happened");
+                        driver.navigate().refresh();
+                        //continue;
+                    }
+                }
             }
 
         } catch (Exception e) {
@@ -136,12 +135,13 @@ public class SendingMessagetoStudents {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
 
-                Object[] dataArr = new Object[5];
+                Object[] dataArr = new Object[6];
                 dataArr[0] = row.getCell(0).toString();
                 dataArr[1] = row.getCell(1).toString();
                 dataArr[2] = row.getCell(2).toString();
                 dataArr[3] = row.getCell(3).toString();
                 dataArr[4] = row.getCell(4).toString();
+                dataArr[5] = row.getCell(5).toString();
 
                 dataList.add(dataArr);
             }
